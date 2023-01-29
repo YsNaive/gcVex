@@ -6,18 +6,14 @@
 /*    Description:  IQ2 project                                               */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
-#include "vex.h"
+
+// 基本函式庫
+#include <vex.h>
+#include <iq_cpp.h>
+#include<gcVex.h>
 
 using namespace vex;
-
-// A global instance of vex::brain used for printing to the IQ2 brain screen
 vex::brain       Brain;
-
-// define your global instances of motors and other devices here
-
-
 int main() {
-	
-    Brain.Screen.printAt( 2, 30, "Hello IQ2" );
     
 }
