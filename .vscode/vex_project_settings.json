@@ -1,0 +1,18 @@
+{
+	"extension": {
+		"version": "0.3.0",
+		"json": 1
+	},
+	"project": {
+		"name": "20230129",
+		"description": "",
+		"creationDate": "2023/1/29 下午1:48:21",
+		"platform": "IQ2",
+		"language": "cpp",
+		"slot": 1,
+		"sdkVersion": "IQ2_20220726_10_00_00",
+		"cpp": {
+			"includePath": []
+		}
+	}
+}
