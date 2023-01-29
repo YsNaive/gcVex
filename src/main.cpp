@@ -10,7 +10,7 @@
 // 基本函式庫
 #include <vex.h>
 #include <iq_cpp.h>
-#include<gcVex.h>
+#include <gcVex\gcVex.h>
 
 using namespace vex;
 vex::brain       Brain;

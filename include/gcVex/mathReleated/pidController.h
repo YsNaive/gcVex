@@ -1,5 +1,5 @@
-#include "..\\gcVex\\struct\\core.h"
 #pragma once
+#include "gcVex\\struct\\core.h"
 class pidController
 {
 private:
