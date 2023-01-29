@@ -1,4 +1,4 @@
-#include "intExtention.h"
+#include "..\struct\intExtention.h"
 
 int2::int2(){
     x = 0;

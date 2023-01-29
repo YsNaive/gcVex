@@ -1,4 +1,4 @@
-#include "floatExtention.h"
+#include "..\struct\floatExtention.h"
 
 float2::float2(){
     x = 0;

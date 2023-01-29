@@ -1,4 +1,5 @@
-#pragma onec
+#ifndef GCVEX_FLOATECTENTION_H_
+#define GCVEX_FLOATECTENTION_H_
 
 struct float2
 {
@@ -18,3 +19,5 @@ struct float3
     float3();
     float3(float xVal, float yVal, float zVal);
 };
+
+#endif

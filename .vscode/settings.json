@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.ds_store": "cpp",
+        "*.inc": "cpp"
+    }
+}

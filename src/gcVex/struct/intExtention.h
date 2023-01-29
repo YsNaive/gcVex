@@ -1,4 +1,5 @@
-#pragma onec
+#ifndef GCVEX_INTECTENTION_H_
+#define GCVEX_INTECTENTION_H_
 
 struct int2
 {
@@ -18,3 +19,5 @@ struct int3
     int3();
     int3(int xVal, int yVal, int zVal);
 };
+
+#endif
