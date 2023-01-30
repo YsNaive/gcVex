@@ -5,5 +5,8 @@
 #include "struct\floatExtention.h"
 
 #include "mathReleated\pidController.h"
+#include "mathReleated\accCurve.h"
+
+#include "robotControl\chassisController.h"
 
 #endif

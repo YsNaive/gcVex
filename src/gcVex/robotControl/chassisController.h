@@ -4,8 +4,14 @@
 #include <vex.h>
 #include "..\struct.inc"
 #include "..\mathReleated.inc"
+#include "..\robotControl\motorController.h"
 
 using namespace vex;
+
+enum turnDirection{
+    left,
+    right
+};
 
 class chassisController
 {
@@ -14,7 +20,9 @@ private:
     pidController pidController;
 
 public:
-    motor leftMotor, rightMotor;
+    motorController leftMotor = motorController(PORT12), rightMotor = motorController(PORT7);
+    float startAccEnc;
+    float endAccEnc;
 
     chassisController(int leftMotorPort, int rightMotorPort, float3 pid);
     ~chassisController();
@@ -27,12 +35,14 @@ public:
     void on(float2 power);
     void on(float leftPower, float rightPower);
     void off();
+    void off(bool isHold);
     
-    void moveEnc(float power, float enc);
-    void moveEnc(float power, float enc, void* callBack);
-    void arcMoveEnc(float power, float r, float enc);
-    void arcMoveEnc(float power, float r, float enc, void* callBack);
-    void moveTime(float power, float time);
+    void encMove(float power, float enc);
+    void encMoveAcc(float power, float enc);
+    void arcMove(float power, float r, float enc);
+    void onForTime(float power, float time);
+    void turnEnc(float power, float enc, turnDirection dir);
+    void turnGyro(float power, float angle);
 };
 
 #endif
