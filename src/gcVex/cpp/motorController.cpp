@@ -3,6 +3,7 @@
 motorController::motorController(int port){
     motor = vex::motor(port);
 }
+motorController::motorController(){}
 motorController::~motorController(){}
 
 void motorController::on(float power){
@@ -11,14 +12,14 @@ void motorController::on(float power){
 }
 
 void motorController::off(){
-    motor.stop(breakMode);
+    motor.stop();
 }
 
 void motorController::off(bool isHold){
     if(isHold)
-        breakMode = vex::brakeType::hold;
+        motor.setStopping(vex::brakeType::hold);
     else
-        breakMode = vex::brakeType::brake;
+        motor.setStopping(vex::brakeType::coast);
 
     off();
 }

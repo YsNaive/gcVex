@@ -7,6 +7,7 @@
 #include "mathReleated\pidController.h"
 #include "mathReleated\accCurve.h"
 
-#include "robotControl\chassisController.h"
+#include "control\motorController.h"
+#include "control\chassisController.h"
 
 #endif

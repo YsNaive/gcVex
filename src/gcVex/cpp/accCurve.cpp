@@ -17,5 +17,5 @@ float accCurve::upCurve(float x){
 }
 
 float accCurve::downCurve(float x){
-    return accCurve::powerX(x, 2.3f, curveDirection::down);
+    return accCurve::powerX(x, 0.2f, curveDirection::down);
 }
