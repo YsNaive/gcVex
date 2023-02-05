@@ -1,4 +1,4 @@
-#include "..\robotControl\motorController.h"
+#include "..\control\motorController.h"
 
 motorController::motorController(int port){
     motor = vex::motor(port);
@@ -24,5 +24,12 @@ void motorController::off(bool isHold){
     off();
 }
 
-// void motorController::onEnc(float power, float enc);
-// void motorController::turnToPosition(float power, float position);
+void motorController::onEnc(float power, float enc, bool waitForCompletion){
+    motor.setVelocity(power, vex::velocityUnits::pct );
+    motor.spinTo(enc,vex::rotationUnits::deg , waitForCompletion);
+}
+
+void motorController::turnToPosition(float power, float position, bool waitForCompletion){
+    motor.setVelocity(power, vex::velocityUnits::pct );
+    motor.spinToPosition(position, vex::rotationUnits::deg , waitForCompletion);
+}

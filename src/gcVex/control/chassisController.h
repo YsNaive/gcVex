@@ -42,7 +42,7 @@ public:
     void off();
     void off(bool isHold);
     
-    void encMove(float enc, float power);
+    void encMove(float enc, float power, bool isHold);
     void encMoveAcc(float enc, float power);
     void arcMove(float power, float r, float enc);
     void onForTime(float power, float time, bool PdorNot);

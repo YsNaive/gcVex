@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <vex.h>
+#include <iq2_api.h>
 
 class motorController
 {
@@ -17,8 +18,8 @@ public:
     void on(float power);
     void off();
     void off(bool isHold);
-    void onEnc(float power, float enc);
-    void turnToPosition(float power, float position);
+    void onEnc(float power, float enc, bool waitForCompletion);
+    void turnToPosition(float power, float position, bool waitForCompletion);
 };
 
 #endif

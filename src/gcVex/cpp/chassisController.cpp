@@ -45,13 +45,12 @@
         rightMotor.off(isHold);
     }
     
-    void chassisController::encMove(float enc, float power){
+    void chassisController::encMove(float enc, float power ,bool isHold){
         bool arrived = false;
+        pidController.reset();
         float leftStartPos = leftMotor.motor.position(vex::rotationUnits::deg);
         float rightStartPos = rightMotor.motor.position(vex::rotationUnits::deg);
-
-        vex::inertial brainInertial = vex::inertial();
-        float gyroStartPos = brainInertial.rotation();
+        float gyroStartPos = inertialPtr->rotation();
 
         float nowEnc = 0;
         float leftEnc;
@@ -64,21 +63,21 @@
             nowEnc=((leftEnc+rightEnc)/2);
             arrived = (nowEnc >= enc);
             //error = leftEnc-rightEnc;
-            error = brainInertial.rotation() - gyroStartPos;
+            error = inertialPtr->rotation() - gyroStartPos;
+            pidController.calPID(power);
             pidController.update(error);
             fixValue=pidController.fixValue;
-            if(power>0){
-                leftMotor.on(power+fixValue);
-                rightMotor.on(power-fixValue);
-            }
-                
-            else{
-                leftMotor.on(power-fixValue);
-                rightMotor.on(power+fixValue);
-            }
+            if(power>0)
+                fixValue*=-1;
+
+            leftMotor.on(power+fixValue);
+            rightMotor.on(power-fixValue);
             vex::wait(10,vex::timeUnits::msec);
         }
-        chassisController::off(true);
+        if(isHold)
+            chassisController::off(true);
+        else
+            chassisController::off();
     }
 
     /// @brief 
@@ -106,10 +105,10 @@
 
     void chassisController::encMoveAcc(float enc, float power){
         bool arrived = false;
+        pidController.reset();
         float leftStartPos = leftMotor.motor.position(vex::rotationUnits::deg);
         float rightStartPos = rightMotor.motor.position(vex::rotationUnits::deg);
-        vex::inertial brainInertial = vex::inertial();
-        float gyroStartPos = brainInertial.rotation();
+        float gyroStartPos = inertialPtr->rotation();
         float nowEnc = 0;
         float leftEnc;
         float rightEnc;
@@ -122,7 +121,7 @@
             nowEnc=((leftEnc+rightEnc)/2);
             error = leftEnc-rightEnc;
             arrived =(abs(enc-nowEnc)< allowErrorEnc);
-            //error = brainInertial.rotation() - gyroStartPos;
+            //error = inertialPtr->rotation() - gyroStartPos;
             nowPower=chassisController::accPower(nowEnc,power,enc);
             pidController.update(error);
             fixValue=pidController.fixValue;
@@ -147,31 +146,30 @@
         float leftStartPos = leftMotor.motor.position(vex::rotationUnits::deg);
         float rightStartPos = rightMotor.motor.position(vex::rotationUnits::deg);
         float nowEnc = 0;
-        float leftEnc;
-        float rightEnc;
+        float leftEnc=0;
+        float rightEnc=0;
         float error=0;
-        float fixValue;
+        float fixValue=0;
         while(!arrived){
             leftEnc = abs(leftMotor.motor.position(vex::rotationUnits::deg)-leftStartPos);
             rightEnc = abs(rightMotor.motor.position(vex::rotationUnits::deg)-rightStartPos);
             nowEnc=((leftEnc+rightEnc)/2);
             if(r>0)
-                leftEnc*r;
+                leftEnc =  abs(leftEnc*r);
             else
-                rightEnc*r;
+                rightEnc = abs(rightEnc*r);
             arrived = (nowEnc >= enc);
             error = leftEnc-rightEnc;
+            // pidController.setMaxPID(float3 (3,0,0.5));
+            // pidController.setMinPID(float3 (0.9,0,0.07));
+            pidController.calPID(power);
             pidController.update(error);
             fixValue=pidController.fixValue;
-            if(power>0){
-                leftMotor.on(power+fixValue);
-                rightMotor.on(power-fixValue);
-            }
-                
-            else{
-                leftMotor.on(power-fixValue);
-                rightMotor.on(power+fixValue);
-            }
+            if(power>0)
+                fixValue*=-1;
+
+            leftMotor.on(power+fixValue);
+            rightMotor.on(power-fixValue);
             vex::wait(10,vex::timeUnits::msec);
         }
         chassisController::off(true);
@@ -180,33 +178,30 @@
 
     void chassisController::onForTime(float power, float time, bool PdorNot){
         brainPtr->Timer.reset();
+        pidController.reset();
         float leftStartPos = leftMotor.motor.position(vex::rotationUnits::deg);
         float rightStartPos = rightMotor.motor.position(vex::rotationUnits::deg);
         vex::inertial brainInertial = vex::inertial();
-        float gyroStartPos = brainInertial.rotation();
+        float gyroStartPos = inertialPtr->rotation();
         float nowEnc = 0;
         float leftEnc;
         float rightEnc;
         float error=0;
         float fixValue;
-        while((brainPtr->Timer.value() >= time)){
+        while((brainPtr->Timer.value() <= time)){
             if(PdorNot){
                 leftEnc = abs(leftMotor.motor.position(vex::rotationUnits::deg)-leftStartPos);
                 rightEnc = abs(rightMotor.motor.position(vex::rotationUnits::deg)-rightStartPos);
                 nowEnc=((leftEnc+rightEnc)/2);
-                //error = leftEnc-rightEnc;
-                error = brainInertial.rotation() - gyroStartPos;
+                error = leftEnc-rightEnc;
+                //error = inertialPtr->rotation() - gyroStartPos;
                 pidController.update(error);
                 fixValue=pidController.fixValue;\
-                if(power>0){
-                    leftMotor.on(power+fixValue);
-                    rightMotor.on(power-fixValue);
-                }
-                
-                else{
-                    leftMotor.on(power-fixValue);
-                    rightMotor.on(power+fixValue);
-                }   
+                if(power>0)
+                    fixValue*=-1;
+
+                leftMotor.on(power+fixValue);
+                rightMotor.on(power-fixValue);
                 vex::wait(10,vex::timeUnits::msec);
             }
             else{
@@ -218,18 +213,30 @@
 
     void chassisController::turnEnc(float power, float enc, turnDirection dir){}
 
-    int sgn(double d)
-    {
-        if (d<0) return -1;
-        else if (d==0) return 0;
-        else return 1;
-    }
-
     void chassisController::turnGyro(float target ){
         bool arrived = false;
-        // TODO rewrite turn
-        while(!arrived){
-            printf("%d\n",(int)inertialPtr->rotation());
+        float3 pid = float3(0.5, 0, 0.3);
+        float error;
+        float lastError = 0 ;
+        float totalError = 0;
+        float power;
+        int arrivedCount=0;
+        while(arrivedCount < 8){
+            printf("ERR %d\n",(int)error);
+            printf("DEG %d\n",(int)inertialPtr->rotation(vex::rotationUnits::deg));
+            error = ( target - (inertialPtr->rotation(vex::rotationUnits::deg)));
+            totalError += error;
+            if(std::abs(error) < 3)
+                arrivedCount++;
+            else
+                arrivedCount = 0;
+
+            power = (float3(error, totalError, lastError-error)*pid).sum();
+            power += 2*(power/std::abs(power));
+            chassisController::on( power , -power);
+            lastError = error;
+            vex::wait(25, timeUnits::msec);
         }
+        brainPtr->playSound(vex::soundType::alarm);
         chassisController::off(true);
     }    
