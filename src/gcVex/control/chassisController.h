@@ -46,7 +46,7 @@ public:
     void encMoveAcc(float enc, float power);
     void arcMove(float power, float r, float enc);
     void onForTime(float power, float time, bool PdorNot);
-    void turnEnc(float power, float enc, turnDirection dir);
+    void turnEnc(float power, float enc);
     void turnGyro(float target);
 };
 

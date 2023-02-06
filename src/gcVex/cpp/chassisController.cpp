@@ -139,7 +139,7 @@
     }
     /// @brief 
     /// @param power 
-    /// @param r if (r > 0) :turn right .else turn left
+    /// @param r if (r < 0) :turn right .else turn left
     /// @param enc 
     void chassisController::arcMove(float power, float r, float enc){
         bool arrived = false;
@@ -210,8 +210,23 @@
         }
         chassisController::off(true);
     }
-
-    void chassisController::turnEnc(float power, float enc, turnDirection dir){}
+    /// @brief 
+    /// @param power 
+    /// @param enc 
+    /// @param dir 1 = left ; 0 = right
+    void chassisController::turnEnc(float power, float enc){
+        float leftStartEnc = leftMotor.motor.position(rotationUnits::deg);
+        float rightStartEnc = rightMotor.motor.position(rotationUnits::deg);
+        float leftEnc = 0;
+        float rightEnc = 0;
+        while((leftEnc + rightEnc/2) < enc){
+        leftEnc = abs(leftMotor.motor.position(rotationUnits::deg) - leftStartEnc);
+        rightEnc = abs(rightMotor.motor.position(rotationUnits::deg) - rightStartEnc);
+        chassisController::on(power, -power);
+        }
+        chassisController::off(true);
+        brainPtr->playSound(vex::soundType::alarm);
+    }
 
     void chassisController::turnGyro(float target ){
         bool arrived = false;
@@ -232,7 +247,11 @@
                 arrivedCount = 0;
 
             power = (float3(error, totalError, lastError-error)*pid).sum();
-            power += 2*(power/std::abs(power));
+            power += 2.6*(power/std::abs(power));
+            if(error < 40)
+                power *= 0.75;
+            else
+                power*= 0.9;
             chassisController::on( power , -power);
             lastError = error;
             vex::wait(25, timeUnits::msec);
