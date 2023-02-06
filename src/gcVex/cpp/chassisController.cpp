@@ -139,7 +139,7 @@
     }
     /// @brief 
     /// @param power 
-    /// @param r if (r > 0) :turn right .else turn left
+    /// @param r if (r < 0) :turn right .else turn left
     /// @param enc 
     void chassisController::arcMove(float power, float r, float enc){
         bool arrived = false;
@@ -232,7 +232,11 @@
                 arrivedCount = 0;
 
             power = (float3(error, totalError, lastError-error)*pid).sum();
-            power += 2*(power/std::abs(power));
+            power += 2.6*(power/std::abs(power));
+            if(error < 40)
+                power *= 0.75;
+            else
+                power*= 0.85;
             chassisController::on( power , -power);
             lastError = error;
             vex::wait(25, timeUnits::msec);
