@@ -17,6 +17,7 @@
 #ifndef GCVEX_PIDCONTROLLER_H_
 #define GCVEX_PIDCONTROLLER_H_
 
+#include <functional>
 #include "..\struct\floatExtention.h"
 
 namespace gcVex{
@@ -26,19 +27,19 @@ namespace gcVex{
         float3 pid;     // { P, I, D }
         float3 error;   // { Error, AccumulateError, LastError }
         float fixValue; // give back value from pidController
-        float (*onCalculateError)();
-        void (*onUpdated)(float);
+        std::function<float()> onCalculateError;
+        std::function<void(float)> onUpdated;
     public:
         pidController();
         pidController(float3 pid);
-        pidController(float3 pid,float (*onCalculateError)(),void (*onUpdated)(float));
+        pidController(float3 pid,std::function<float()> onCalculateError,std::function<void(float)> onUpdated);
         ~pidController();
 
         /// @brief calling before update(), you need to return error in this Func
-        void setOnCalculateError (float (*onCalculateError)());
+        void setOnCalculateError (std::function<float()> onCalculateError);
 
         /// @brief calling after update(), you can do something with feedback value by controller
-        void setOnUpdated (void (*onUpdated)(float));
+        void setOnUpdated (std::function<void(float)> onUpdated);
 
         void setPID(float3 pid);
         void setPID(float p, float i, float d);
@@ -50,6 +51,8 @@ namespace gcVex{
         float3 getPID();
         float3 getError();
         float getFixValue();
+
+        void reset();
     };
 }
 

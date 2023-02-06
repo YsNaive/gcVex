@@ -10,7 +10,7 @@ namespace gcVex{
             this->pid = pid;
             error = float3(0,0,0);
         }
-        pidController::pidController(float3 pid,float (*onCalculateError)(),void (*onUpdated)(float)){
+        pidController::pidController(float3 pid,std::function<float()> onCalculateError,std::function<void(float)> onUpdated){
             this->pid = pid;
             error = float3(0,0,0);
             this->onCalculateError = onCalculateError;
@@ -19,12 +19,12 @@ namespace gcVex{
         pidController::~pidController(){}
 
         /// @brief calling before update(), you need to return error in this Func
-        void pidController::setOnCalculateError (float (*onCalculateError)()){
+        void pidController::setOnCalculateError (std::function<float()> onCalculateError){
             this->onCalculateError = onCalculateError;
         }
 
         /// @brief calling after update(), you can do something with feedback value by controller
-        void pidController::setOnUpdated (void (*onUpdated)(float)){
+        void pidController::setOnUpdated (std::function<void(float)> onUpdated){
             this->onUpdated = onUpdated;
         }
 
@@ -57,5 +57,9 @@ namespace gcVex{
         }
         float pidController::getFixValue(){
             return this->fixValue;
+        }
+
+        void pidController::reset(){
+            error = float3(0,0,0);
         }
 }
