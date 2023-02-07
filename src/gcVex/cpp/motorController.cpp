@@ -45,7 +45,8 @@ void motorController::init(){
         motor.resetPosition();
     controller.setPID(setting.pid);
 
-    task = vex::task(update);
+    // task = vex::task(update);
+    // TODO tick apply
 }
 void motorController::off(){
     motor.stop();

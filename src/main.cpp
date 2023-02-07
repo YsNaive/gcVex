@@ -33,7 +33,6 @@ int main() {
             rightMotor.setVelocity(40 - fix,percentUnits::pct);
         });
     
-
     while ((true))
     {
         controller.update();

@@ -13,6 +13,7 @@
 
 #include "control\motorController.h"
 #include "control\chassisController.h"
+#include "control\tick.h"
 
 
 #endif
