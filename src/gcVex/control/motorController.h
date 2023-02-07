@@ -4,6 +4,7 @@
 #include <math.h>
 #include <functional>
 #include <vex.h>
+#include "../control/tick.h"
 #include "../mathReleated/pidController.h"
 #include "../struct/motorSetting.h"
 
@@ -13,7 +14,8 @@ namespace gcVex{
         on,
         onForEnc,
         onForTime,
-        onToPosition
+        onToPosition,
+        none
     };
 
     class motorController
@@ -21,15 +23,18 @@ namespace gcVex{
     private:
         int targetPower    = 0;
         int targetPosition = 0;
+        int checkCount     = 0;
         float targetTime   = 0;
-        bool isClosed        = true;
-        bool isSettingHotFix = false;
+        bool isClosed          = true;
+        bool isSettingHotFix   = false;
+        bool isNextCmdWait = false;
         motorSetting setting;
-        pidController controller;
+        pidController powerController;
+        pidController encController;
         motorState state;
         vex::motor motor = vex::motor(vex::PORT1);
         vex::timer timer;
-        vex::task task;
+        tickTask* task = nullptr;
         std::function<void()> callBack;
 
         void spin(int power);
@@ -48,7 +53,8 @@ namespace gcVex{
         void setPID(float3 pid); // let motor spin to target speed faster
         void setBreakType(vex::brakeType brakeType);
         
-        void update();
+        motorController* waitCmd();
+        bool update(); // for tickTask updating
         void init();
         void off();                          // breakMode depend on setting, and it will stop any "on()" request.
         void off(vex::brakeType breakType);  // break by type at once, it doesn't change setting
@@ -59,7 +65,6 @@ namespace gcVex{
         void close();
 
         bool isOff();
-        void wait();
 
     };
 }

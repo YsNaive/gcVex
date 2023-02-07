@@ -16,27 +16,27 @@ using namespace gcVex;
 vex::brain Brain;
 
 int main() {
-    motor leftMotor = motor(PORT12);
-    motor rightMotor = motor(PORT7);
-    leftMotor.resetPosition();
-    rightMotor.resetPosition();
-    leftMotor.spin(directionType::fwd);
-    rightMotor.spin(directionType::fwd);
+    tick::init();
+    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nstart\n");
+    motorSetting setting;
+    setting.breakType = vex::brakeType::hold;
+    setting.isResetPosition_init = true;
+    setting.isReversed_init = true;
+    setting.offRange = 3;
+    setting.pid = float3(0.4, 0, 0.12);
+    setting.port = PORT12;
+    motorController lm = motorController(setting);
+    setting.isReversed_init = false;
+    setting.port = PORT7;
+    motorController rm = motorController(setting);
 
-    pidController controller = pidController(
-        float3(0.2, 0, 0.04),
-        [&](void) -> float { 
-            return leftMotor.position(rotationUnits::deg) - rightMotor.position(rotationUnits::deg); 
-            },
-        [&](float fix) -> void { 
-            leftMotor.setVelocity(40 + fix,percentUnits::pct);
-            rightMotor.setVelocity(40 - fix,percentUnits::pct);
-        });
+    rm.onEnc(0, 200);
+    lm.waitCmd()->onEnc(0, 200);
+    vex::wait(100, timeUnits::msec);
+    rm.onEnc(0, 200);
+    lm.onEnc(0, 200);
     
-    while ((true))
-    {
-        controller.update();
-    }
-    
+    tick::debug();
+    printf("finish\n");
 }
 
