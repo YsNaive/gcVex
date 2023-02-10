@@ -179,7 +179,8 @@ void rightPurpleBlue(){
     shotPower = 48;
     chassis.leftMotor.motor.setPosition(0, vex::rotationUnits::deg);
     chassis.rightMotor.motor.setPosition(0, vex::rotationUnits::deg);
-    // Brain.playSound(vex::soundType::alarm);
+
+
     chassis.encMove(100,-40,false);
     chassis.onForTime(-60,1,true);
     upDownMotor.on(100);
@@ -190,6 +191,7 @@ void rightPurpleBlue(){
     // wait(0.3,vex::timeUnits::sec);
     chassis.encMoveAcc(210 , 60);
     upDownMotor.turnToPosition(100,270,false);
+
     chassis.turnGyro(48.5);
 
     shot1Motor.on(shotPower);
@@ -261,33 +263,17 @@ void rightPurpleBlue(){
 
 int main() {
 
-    //main
+     // main
 
-    // init();
-    // setUp();
+    init();
+    setUp();
 
-    // brainInertial.setRotation(180, vex::rotationUnits::deg);
-    // upDownMotor.turnToPosition(80,225,true);
-    // touchLed.on(vex::color::green);
-    // while(!touchLed.pressing()){}
-    // rightPurpleBlue();
+    brainInertial.setRotation(180, vex::rotationUnits::deg);
+    upDownMotor.turnToPosition(80,225,true);
+    touchLed.on(vex::color::green);
+    while(!touchLed.pressing()){}
+    rightPurpleBlue();
 
-    // while(!touchLed.pressing()){}
-    // touchLed.on(vex::color::green);
-    // brainInertial.resetRotation();
-    // brainInertial.resetHeading();
-    // brainInertial.setRotation(0, vex::rotationUnits::deg);
-    // leftPurpleBlue(); 
-
-    // extend();
-
-
-
-    // left purple and blue
-    upDownMotor.turnToPosition(100,270,false);
-    clawMotor.turnToPosition(50,495, true);
-    upDownMotor.off(true);
-    Color.setLight(ledState::on);
     while(!touchLed.pressing()){}
     touchLed.on(vex::color::green);
     brainInertial.resetRotation();
@@ -297,9 +283,31 @@ int main() {
 
     extend();
 
+    // //right blue and purple
+
+    // upDownMotor.turnToPosition(100,270,false);
+    // clawMotor.turnToPosition(50,495, true);
+    // // rightTower() 裡面要改
+    // chassis.encMove(-40, 160, true);
+    // rightPurpleBlue();
 
 
-    //
+    // // left purple and blue
+
+    // upDownMotor.turnToPosition(100,270,false);
+    // clawMotor.turnToPosition(50,495, true);
+    // upDownMotor.off(true);
+    // Color.setLight(ledState::on);
+    // while(!touchLed.pressing()){}
+    // touchLed.on(vex::color::green);
+    // brainInertial.resetRotation();
+    // brainInertial.resetHeading();
+    // brainInertial.setRotation(0, vex::rotationUnits::deg);
+    // leftPurpleBlue(); 
+    // extend();
+
+
+
 
  }
 
