@@ -61,7 +61,7 @@ void setUp(){
     vex::wait(1.5,vex::timeUnits::sec);
     upDownMotor.off();
     clawMotor.off();
-    upDownMotor.motor.setPosition(9,vex::rotationUnits::deg);
+    upDownMotor.motor.setPosition(5,vex::rotationUnits::deg);
     clawMotor.motor.setPosition(-10 ,vex::rotationUnits::deg);
     upDownMotor.turnToPosition(100,270,false);
     clawMotor.turnToPosition(50,495, true);
@@ -259,9 +259,9 @@ void rightPurpleBlue(){
 
  void extend(){
     chassis.turnEnc(-70,80);
-    chassis.encMove(230,70,false);
+    chassis.encMove(235,70,false);
     clawMotor.on(100);
-    chassis.arcMove(90, -3.7, 90);
+    chassis.arcMove(90, -3.6, 90);
    
     chassis.on(100,100);
  }
