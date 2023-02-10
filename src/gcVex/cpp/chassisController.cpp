@@ -278,7 +278,7 @@ void chassisController::turnGyro(float target)
         if (error < 50)
             power *= 0.75;
         else
-            power *= 1.1;
+            power *= 1.2;
         chassisController::on(power, -power);
         lastError = error;
         vex::wait(25, timeUnits::msec);
