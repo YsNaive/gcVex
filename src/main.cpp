@@ -61,7 +61,7 @@ void setUp(){
     vex::wait(1.5,vex::timeUnits::sec);
     upDownMotor.off();
     clawMotor.off();
-    upDownMotor.motor.setPosition(5,vex::rotationUnits::deg);
+    upDownMotor.motor.setPosition(0,vex::rotationUnits::deg);
     clawMotor.motor.setPosition(0 ,vex::rotationUnits::deg);
     upDownMotor.turnToPosition(100,270,false);
     clawMotor.turnToPosition(50,495, true);
@@ -134,7 +134,7 @@ void purpleTower(float time, float p, float d){
 }
 
 void leftPurpleBlue(){
-    shotPower = 60;
+    shotPower = 53;
     // 1.0
     // chassis.encMove(180,50,false);
     // shot1Motor.on(100);
@@ -164,7 +164,7 @@ void leftPurpleBlue(){
     shot2Motor.off();
     chassis.arcMove(-60,-27,55);
     chassis.encMove(82,-30,true);
-    upDownMotor.turnToPosition(100,285,false);
+    upDownMotor.turnToPosition(100,290,false);
     upDownMotor.off(true);
     chassis.turnGyro(0);
     shot1Motor.on(shotPower);
@@ -180,7 +180,7 @@ void leftPurpleBlue(){
     shot(false);
 }
 void rightPurpleBlue(){
-    shotPower = 55;
+    shotPower = 45;
     chassis.leftMotor.motor.setPosition(0, vex::rotationUnits::deg);
     chassis.rightMotor.motor.setPosition(0, vex::rotationUnits::deg);
 
@@ -188,7 +188,7 @@ void rightPurpleBlue(){
     chassis.encMove(100,-40,false);
     chassis.onForTime(-60,1,true);
     upDownMotor.on(100);
-    wait(0.7,vex::timeUnits::sec);
+    wait(1.1,vex::timeUnits::sec);
     //chassis.on(-100,-100);
     chassis.off(false);
     upDownMotor.turnToPosition(100,185,true);
@@ -200,7 +200,7 @@ void rightPurpleBlue(){
 
     shot1Motor.on(shotPower);
     shot2Motor.on(shotPower);
-    chassis.encMoveAcc(602, 70);
+    chassis.encMoveAcc(595, 70);
     chassis.turnGyro(0);
     chassis.onForTime(-60,0.8,false);
     chassis.on(-80,-80);
@@ -208,7 +208,7 @@ void rightPurpleBlue(){
     wait(1,timeUnits::sec);
     clawMotor.turnToPosition(100,507,true);
 
-    chassis.arcMove(80,1.7,105);
+    chassis.arcMove(80,1.7,118);
 
     upDownMotor.on(100);
     wait(1.1,timeUnits::sec);
@@ -222,7 +222,7 @@ void rightPurpleBlue(){
     upDownMotor.on(100);
     wait(1.1,timeUnits::sec);
 
-    upDownMotor.turnToPosition(100,270,false);
+    upDownMotor.turnToPosition(100,270,false); //
 
 
     //chassis.turnGyro(94.5);
@@ -246,12 +246,13 @@ void rightPurpleBlue(){
     chassis.on(100,100);
     wait(3,vex::timeUnits::sec);
 
-    shotPower = 60;
+    shotPower = 57;
     shot1Motor.on(shotPower);
     shot2Motor.on(shotPower);
-    chassis.arcMove(-60,1.5,160);
+    chassis.arcMove(-60,1.5,140);
     //chassis.turnGyro(0);
-    chassis.turnEnc(-70,311);
+    upDownMotor.turnToPosition(100,300,false);
+    chassis.turnEnc(-70,317);
     
     shot(true);
     touchLed.off();
