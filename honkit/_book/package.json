@@ -1,0 +1,21 @@
+{
+  "devDependencies": {
+    "honkit": "^4.0.4"
+  },
+  "scripts": {
+    "build": "honkit build",
+    "serve": "honkit serve"
+  },
+  "dependencies": {
+    "gitbook-plugin-betterchinese": "^0.0.1",
+    "gitbook-plugin-code-pro": "^0.1.1",
+    "gitbook-plugin-copy-code-button": "^0.0.2",
+    "gitbook-plugin-folding-chapters": "^0.0.9",
+    "gitbook-plugin-header-generator-rmp": "^1.0.2",
+    "gitbook-plugin-hints": "^1.0.2",
+    "gitbook-plugin-page-toc-button": "^0.1.1",
+    "gitbook-plugin-theme-code": "^0.0.24",
+    "gitbook-plugin-toolbar": "^0.6.0",
+    "markdown-toc-gitbook": "^0.11.0"
+  }
+}

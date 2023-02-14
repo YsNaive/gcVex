@@ -1,0 +1,23 @@
+{
+  "title": "GC Vex",
+  "author": "YsNaive",
+  "language": "en",
+  "plugins": [
+    "theme-code",
+    "folding-chapters",
+    "toolbar",
+    "code-pro",
+    "hints",
+    "gitbook-plugin-betterchinese",
+    "page-toc-button"
+  ],
+  "pluginsConfig": {
+    "theme-default": {
+      "showLevel": false
+    },
+    "page-toc-button": {
+      "maxTocDepth": 2,
+      "minTocSize": 2
+    }
+  }
+}
