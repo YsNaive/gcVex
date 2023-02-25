@@ -33,7 +33,7 @@ void init(){
     brainInertial.resetHeading();
 
     // 底盤設定
-    chassis = chassisController(PORT12,PORT7,float3(0.3,0,0.1),float3(0.5,0,0.15),&Brain,&brainInertial);
+    chassis = chassisController(PORT12,PORT7,float3(0.2,0,0.05),float3(0.4,0,0.1),&Brain,&brainInertial);
     chassis.leftMotor.motor.setReversed(true);
     chassis.minPower = 30;
     chassis.startAccEnc = 50;
