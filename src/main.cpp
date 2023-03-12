@@ -17,6 +17,7 @@ using namespace vex;
 
 vex::brain Brain;
 chassisController chassis;
+pidController pid;
 motorController shot1Motor;
 motorController shot2Motor;
 motorController clawMotor;
@@ -24,6 +25,7 @@ motorController upDownMotor;
 vex::inertial brainInertial;
 vex::touchled touchLed = vex::touchled(PORT2);
 vex::colorsensor Color = colorsensor(PORT4);
+vex::gyro gyro = vex::gyro(PORT1);
 float shotPower = 45;
 float colorMid = 36 ;
 
@@ -111,6 +113,49 @@ void shot(bool isReset){
      
     }
 }
+
+
+void yellowTower(float time){
+    float power = 90;
+    pid.reset();
+    float leftStartPos = chassis.leftMotor.motor.position(vex::rotationUnits::deg);
+    float rightStartPos = chassis.rightMotor.motor.position(vex::rotationUnits::deg);
+    float nowEnc = 0;
+    float leftEnc;
+    float rightEnc;
+    float error = 0;
+    float fixValue;
+    float nowPower;
+    Brain.Timer.reset();
+    chassis.startAccEnc = 140;
+    chassis.endAccEnc = 0;
+    while (Brain.Timer.value() < time)
+    {   
+        leftEnc = abs(chassis.leftMotor.motor.position(vex::rotationUnits::deg) - leftStartPos);
+        rightEnc = abs(chassis.rightMotor.motor.position(vex::rotationUnits::deg) - rightStartPos);
+        nowEnc = ((leftEnc + rightEnc) / 2);
+        error = leftEnc - rightEnc;
+        if (nowEnc >= 245){
+            upDownMotor.on(100);
+        }
+        if (nowEnc <= chassis.startAccEnc)
+            nowPower = (accCurve::upCurve((nowEnc / chassis.startAccEnc)) * power);
+        else 
+            nowPower = power;
+        pid.update(error, nowPower);
+        fixValue = pid.fixValue;
+        if (power > 0)
+            fixValue *= -1;
+
+        chassis.leftMotor.on(nowPower + fixValue);
+        chassis.rightMotor.on(nowPower - fixValue);
+        vex::wait(50, vex::timeUnits::msec);
+    }
+    upDownMotor.turnToPosition(100, 200, true);
+    chassis.off(true);
+    wait(0.3, timeUnits::sec);
+}
+
 void purpleTower(float time, float p, float d){
 
     float3 pid = float3( p ,0, d);
@@ -286,7 +331,7 @@ int main() {
     upDownMotor.turnToPosition(80,225,true);
     touchLed.on(vex::color::green);
     while(!touchLed.pressing()){}
-    rightPurpleBlue();
+        yellow(1.5);
 
     while(!touchLed.pressing()){}
     touchLed.on(vex::color::green);

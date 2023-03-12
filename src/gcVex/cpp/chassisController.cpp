@@ -4,7 +4,7 @@ chassisController::chassisController()
 {
     startAccEnc = 70;
     endAccEnc = 70;
-    allowErrorEnc = 10;
+    allowErrorEnc = 5;
 }
 chassisController::chassisController(int leftMotorPort, int rightMotorPort, float3 minPid, float3 maxPid, vex::brain *mainBrainPtr, vex::inertial *mainInertialPtr)
 {
@@ -137,7 +137,7 @@ void chassisController::encMoveAcc(float enc, float power)
         arrived = (abs(enc - nowEnc) < allowErrorEnc);
         // error = inertialPtr->rotation() - gyroStartPos;
         nowPower = chassisController::accPower(nowEnc, power, enc);
-        pidController.update(error);
+        pidController.update(error, nowPower);
         fixValue = pidController.fixValue;
         float lpowerError = leftMotor.motor.velocity(percentUnits::pct) - nowPower;
         float rpowerError = rightMotor.motor.velocity(percentUnits::pct) - nowPower;
