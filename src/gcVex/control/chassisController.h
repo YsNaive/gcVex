@@ -22,6 +22,7 @@ private:
     float accPower(float x, float power,float all);
     vex::brain* brainPtr;
     vex::inertial* inertialPtr;
+    vex::gyro *gyroPtr;
 
 public:
     float minPower;
@@ -31,7 +32,7 @@ public:
     motorController leftMotor = motorController(PORT12), rightMotor = motorController(PORT7);
 
     chassisController();
-    chassisController(int leftMotorPort, int rightMotorPort, float3 minPid,float3 maxPid,vex::brain* mainBrainPtr, vex::inertial* mainInertialPtr);
+    chassisController(int leftMotorPort, int rightMotorPort, float3 minPid,float3 maxPid,vex::brain* mainBrainPtr, vex::inertial* mainInertialPtr, vex::gyro *mainGyroPrt);
     ~chassisController();
 
     // twoMotor with same power

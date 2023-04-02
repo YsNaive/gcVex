@@ -6,7 +6,7 @@ chassisController::chassisController()
     endAccEnc = 70;
     allowErrorEnc = 5;
 }
-chassisController::chassisController(int leftMotorPort, int rightMotorPort, float3 minPid, float3 maxPid, vex::brain *mainBrainPtr, vex::inertial *mainInertialPtr)
+chassisController::chassisController(int leftMotorPort, int rightMotorPort, float3 minPid, float3 maxPid, vex::brain *mainBrainPtr, vex::inertial *mainInertialPtr, vex::gyro *mainGyroPrt)
 {
     leftMotor = motorController(leftMotorPort);
     rightMotor = motorController(rightMotorPort);
@@ -14,6 +14,7 @@ chassisController::chassisController(int leftMotorPort, int rightMotorPort, floa
     pidController.setMaxPID(maxPid);
     brainPtr = mainBrainPtr;
     inertialPtr = mainInertialPtr;
+    gyroPtr = mainGyroPrt;
     startAccEnc = 70;
     endAccEnc = 70;
     allowErrorEnc = 10;
@@ -256,7 +257,7 @@ void chassisController::turnEnc(float power, float enc)
 void chassisController::turnGyro(float target)
 {
     bool arrived = false;
-    float3 pid = float3(0.5, 0, 0.3);
+    float3 pid = float3(0.45, 0.001, 0.35);
     float error;
     float lastError = 0;
     float totalError = 0;
@@ -266,9 +267,9 @@ void chassisController::turnGyro(float target)
     {
         printf("ERR %d\n", (int)error);
         printf("DEG %d\n", (int)inertialPtr->rotation(vex::rotationUnits::deg));
-        error = (target - (inertialPtr->rotation(vex::rotationUnits::deg)));
+        error = (target - gyroPtr->rotation(rotationUnits::deg));
         totalError += error;
-        if (std::abs(error) < 3)
+        if (std::abs(error) < 2)
             arrivedCount++;
         else
             arrivedCount = 0;
@@ -279,7 +280,7 @@ void chassisController::turnGyro(float target)
             power *= 0.75;
         else
             power *= 1.2;
-        chassisController::on(power, -power);
+        chassisController::on(-power, power);
         lastError = error;
         vex::wait(25, timeUnits::msec);
     }

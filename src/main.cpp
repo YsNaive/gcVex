@@ -25,17 +25,21 @@ motorController upDownMotor;
 vex::inertial brainInertial;
 vex::touchled touchLed = vex::touchled(PORT2);
 vex::colorsensor Color = colorsensor(PORT4);
-vex::gyro gyro = vex::gyro(PORT1);
+vex::gyro Gyro = vex::gyro(PORT9);
 float shotPower = 45;
 float colorMid = 36 ;
 
 void init(){
     brainInertial = vex::inertial();
-    brainInertial.resetRotation();
-    brainInertial.resetHeading();
+    // brainInertial.resetRotation();
+    // brainInertial.resetHeading();
+    Gyro.installed();
+    Gyro.calibrate(gyroCalibrationType::calNormal, true);
+    Gyro.setRotation(0, rotationUnits::deg);
+    
 
     // 底盤設定
-    chassis = chassisController(PORT12,PORT7,float3(0.2,0,0.05),float3(0.4,0,0.1),&Brain,&brainInertial);
+    chassis = chassisController(PORT12,PORT7,float3(0.3,0,0.05),float3(0.5,0,0.1),&Brain,&brainInertial,&Gyro);
     chassis.leftMotor.motor.setReversed(true);
     chassis.minPower = 30;
     chassis.startAccEnc = 50;
@@ -46,7 +50,6 @@ void init(){
     shot2Motor = motorController(PORT11);
     clawMotor = motorController(PORT6);
     upDownMotor = motorController(PORT8);
-    upDownMotor.motor.setReversed(true);
     shot1Motor.motor.setReversed(true);
     chassis.leftMotor.motor.setPosition(0, vex::rotationUnits::deg);
     chassis.rightMotor.motor.setPosition(0, vex::rotationUnits::deg);
@@ -55,7 +58,7 @@ void init(){
 
 
 void printGyroDeg(){
-    printf("Deg: %d\n", (int)brainInertial.rotation(vex::rotationUnits::deg));
+    printf("Deg: %d\n", (int)Gyro.rotation(rotationUnits::deg));
 }
 void setUp(){
     upDownMotor.on(-50);
@@ -116,7 +119,7 @@ void shot(bool isReset){
 
 
 void yellowTower(float time){
-    float power = 90;
+    float power = -70;
     pid.reset();
     float leftStartPos = chassis.leftMotor.motor.position(vex::rotationUnits::deg);
     float rightStartPos = chassis.rightMotor.motor.position(vex::rotationUnits::deg);
@@ -135,13 +138,15 @@ void yellowTower(float time){
         rightEnc = abs(chassis.rightMotor.motor.position(vex::rotationUnits::deg) - rightStartPos);
         nowEnc = ((leftEnc + rightEnc) / 2);
         error = leftEnc - rightEnc;
-        if (nowEnc >= 245){
+        if (nowEnc >= 310){
             upDownMotor.on(100);
         }
         if (nowEnc <= chassis.startAccEnc)
             nowPower = (accCurve::upCurve((nowEnc / chassis.startAccEnc)) * power);
         else 
             nowPower = power;
+        if(nowPower > -25)
+            nowPower = -25;
         pid.update(error, nowPower);
         fixValue = pid.fixValue;
         if (power > 0)
@@ -322,25 +327,39 @@ void rightPurpleBlue(){
 int main() {
 
     // main
-
     init();
-    Color.setLight(ledState::on);
     setUp();
-
-    brainInertial.setRotation(180, vex::rotationUnits::deg);
-    upDownMotor.turnToPosition(80,225,true);
+    Gyro.setRotation(180, vex::rotationUnits::deg);
+    upDownMotor.turnToPosition(80,220,true);
     touchLed.on(vex::color::green);
     while(!touchLed.pressing()){}
-        yellow(1.5);
+    yellowTower(2.5);
 
-    while(!touchLed.pressing()){}
-    touchLed.on(vex::color::green);
-    brainInertial.resetRotation();
-    brainInertial.resetHeading();
-    brainInertial.setRotation(0, vex::rotationUnits::deg);
-    leftPurpleBlue(); 
+    chassis.encMoveAcc(190 , 80);
+    upDownMotor.turnToPosition(100,275,false);
+    chassis.turnGyro(46);
 
-    extend();
+    shot1Motor.on(shotPower);
+    shot2Motor.on(shotPower);
+    chassis.encMoveAcc(595, 90);
+    chassis.turnGyro(0);
+    chassis.onForTime(-80,0.8,false);
+    chassis.on(-80,-80);
+    clawMotor.on(100);
+    wait(1,timeUnits::sec);
+    clawMotor.turnToPosition(100,507,true);
+
+
+    // chassis.encMoveAcc(250,90);
+
+    // while(!touchLed.pressing()){}
+    // touchLed.on(vex::color::green);
+    // brainInertial.resetRotation();
+    // brainInertial.resetHeading();
+    // brainInertial.setRotation(0, vex::rotationUnits::deg);
+    // leftPurpleBlue(); 
+
+    // extend();
 
     // //right blue and purple
 
