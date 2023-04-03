@@ -41,9 +41,9 @@ void init(){
     // 底盤設定
     chassis = chassisController(PORT12,PORT7,float3(0.3,0,0.05),float3(0.5,0,0.1),&Brain,&brainInertial,&Gyro);
     chassis.leftMotor.motor.setReversed(true);
-    chassis.minPower = 30;
+    chassis.minPower = 12;
     chassis.startAccEnc = 50;
-    chassis.endAccEnc = 170;
+    chassis.endAccEnc = 200;
     chassis.allowErrorEnc = 10;
 
     shot1Motor = motorController(PORT5);
@@ -119,7 +119,7 @@ void shot(bool isReset){
 
 
 void yellowTower(float time){
-    float power = -70;
+    float power = -60;
     pid.reset();
     float leftStartPos = chassis.leftMotor.motor.position(vex::rotationUnits::deg);
     float rightStartPos = chassis.rightMotor.motor.position(vex::rotationUnits::deg);
@@ -138,7 +138,7 @@ void yellowTower(float time){
         rightEnc = abs(chassis.rightMotor.motor.position(vex::rotationUnits::deg) - rightStartPos);
         nowEnc = ((leftEnc + rightEnc) / 2);
         error = leftEnc - rightEnc;
-        if (nowEnc >= 310){
+        if (nowEnc >= 320){
             upDownMotor.on(100);
         }
         if (nowEnc <= chassis.startAccEnc)
@@ -323,6 +323,14 @@ void rightPurpleBlue(){
 //     printf("Deg: %d\n", (int)Color.brightness());
 //     wait(10,timeUnits::msec);
 // }
+void shake(int times){
+    int time = 0;
+    while(time < times){
+        upDownMotor.turnToPosition(70, 50, true);
+        upDownMotor.turnToPosition(70, 250, true);
+        time += 1;
+    }
+}
 
 int main() {
 
@@ -333,21 +341,36 @@ int main() {
     upDownMotor.turnToPosition(80,220,true);
     touchLed.on(vex::color::green);
     while(!touchLed.pressing()){}
-    yellowTower(2.5);
+    yellowTower(2.1);
 
-    chassis.encMoveAcc(190 , 80);
-    upDownMotor.turnToPosition(100,275,false);
-    chassis.turnGyro(46);
+    chassis.encMoveAcc(190 , 50);
+    upDownMotor.turnToPosition(100,240,false);
+    chassis.turnGyro(42);
 
     shot1Motor.on(shotPower);
     shot2Motor.on(shotPower);
-    chassis.encMoveAcc(595, 90);
+    chassis.encMoveAcc(520, 70);
     chassis.turnGyro(0);
-    chassis.onForTime(-80,0.8,false);
-    chassis.on(-80,-80);
+    chassis.onForTime(-40,0.6,false);
+    chassis.on(-50,-50);
     clawMotor.on(100);
     wait(1,timeUnits::sec);
-    clawMotor.turnToPosition(100,507,true);
+    clawMotor.turnToPosition(100,500,true);
+    chassis.encMove(80,50,true);
+    shot1Motor.on(-100);
+    shot2Motor.on(-100);
+    clawMotor.turnToPosition(100,550,false);
+    chassis.turnGyro(100);
+    // chassis.encMove(140, 50, false);
+    chassis.onForTime(60, 0.7,false);
+    wait(0.5, timeUnits::sec);
+    chassis.off(true);
+    shake(4);
+    
+
+    
+
+
 
 
     // chassis.encMoveAcc(250,90);

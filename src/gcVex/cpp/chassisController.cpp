@@ -257,7 +257,7 @@ void chassisController::turnEnc(float power, float enc)
 void chassisController::turnGyro(float target)
 {
     bool arrived = false;
-    float3 pid = float3(0.45, 0.001, 0.35);
+    float3 pid ;
     float error;
     float lastError = 0;
     float totalError = 0;
@@ -269,17 +269,18 @@ void chassisController::turnGyro(float target)
         printf("DEG %d\n", (int)inertialPtr->rotation(vex::rotationUnits::deg));
         error = (target - gyroPtr->rotation(rotationUnits::deg));
         totalError += error;
-        if (std::abs(error) < 2)
+        if (std::abs(error) < 7)
             arrivedCount++;
         else
             arrivedCount = 0;
 
+        if(std::abs(error) > 50)
+            pid = float3(0.45, 0.0001 , 0.3);
+        else
+            pid = float3(0.35, 0.001, 0.1);
+
         power = (float3(error, totalError, lastError - error) * pid).sum();
         power += 2.6 * (power / std::abs(power));
-        if (error < 50)
-            power *= 0.75;
-        else
-            power *= 1.2;
         chassisController::on(-power, power);
         lastError = error;
         vex::wait(25, timeUnits::msec);
