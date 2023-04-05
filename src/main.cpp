@@ -77,20 +77,20 @@ void setUp(){
 }
 void shot(){
     chassis.on(70,70);
-    upDownMotor.turnToPosition(100,60,true);
+    upDownMotor.turnToPosition(100,80,true);
     upDownMotor.on(100);
     wait(1,timeUnits::sec);
-    upDownMotor.turnToPosition(100,60,true);
+    upDownMotor.turnToPosition(100,80,true);
     upDownMotor.on(100);
     wait(1,timeUnits::sec);
-    upDownMotor.turnToPosition(100,60,true);
+    upDownMotor.turnToPosition(100,200,true);
     clawMotor.turnToPosition(100,30,true);
     clawMotor.turnToPosition(100,500,true);
     int times = 0;
     while(times < 3){
     upDownMotor.on(100);
     wait(1,timeUnits::sec);
-    upDownMotor.turnToPosition(100,60,true);
+    upDownMotor.turnToPosition(100,80,true);
     times += 1;
     }
     shot1Motor.on(55);
@@ -100,10 +100,11 @@ void shot(){
     upDownMotor.on(100);
     wait(0.5,timeUnits::sec);
     clawMotor.turnToPosition(100,500,true);
+    times = 0;
     while(times < 3){
         upDownMotor.on(100);
         wait(1,timeUnits::sec);
-        upDownMotor.turnToPosition(100,60,true);       
+        upDownMotor.turnToPosition(100,80,true);       
         times += 1;
     }
     shot1Motor.off();
@@ -324,7 +325,7 @@ void rightPurpleBlue(){
 void shake(int times){
     int time = 0;
     while(time < times){
-        upDownMotor.turnToPosition(100, 50, true);
+        upDownMotor.turnToPosition(100, 80, true);
         upDownMotor.turnToPosition(100, 300, true);
         time += 1;
     }
@@ -347,20 +348,22 @@ int main() {
 
     shot1Motor.on(shotPower);
     shot2Motor.on(shotPower);
-    chassis.encMoveAcc(540, 70);
-    chassis.turnGyro(3);
+    chassis.encMoveAcc(580, 50);
+    upDownMotor.turnToPosition(100,200,false);
+    chassis.turnGyro(2);
     chassis.onForTime(-50,1.1,false);
     chassis.on(-60,-60);
     clawMotor.on(100);
     wait(1,timeUnits::sec);
     clawMotor.turnToPosition(100,515,true);
-    chassis.encMove(70,60,true);
+    chassis.encMove(85,50,true);
     shot1Motor.on(-100);
     shot2Motor.on(-100);
+    upDownMotor.turnToPosition(100,250,false);
     chassis.turnGyro(97);
     clawMotor.turnToPosition(100,550,false);
     
-    chassis.onForTime(60, 0.7,false);
+    chassis.onForTime(70, 1,false);
     wait(0.3, timeUnits::sec);
     chassis.encMove(15,-50,true);
     shake(4);
