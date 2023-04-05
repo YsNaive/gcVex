@@ -275,9 +275,9 @@ void chassisController::turnGyro(float target)
             arrivedCount = 0;
 
         if(std::abs(error) > 50)
-            pid = float3(0.45, 0.0001 , 0.3);
+            pid = float3(0.42, 0.0001 , 0.3);
         else
-            pid = float3(0.35, 0.001, 0.1);
+            pid = float3(0.4, 0.001, 0.2);
 
         power = (float3(error, totalError, lastError - error) * pid).sum();
         power += 2.6 * (power / std::abs(power));
