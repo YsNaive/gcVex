@@ -353,13 +353,13 @@ int main() {
     chassis.on(-60,-60);
     clawMotor.on(100);
     wait(1,timeUnits::sec);
-    clawMotor.turnToPosition(100,480,true);
+    clawMotor.turnToPosition(100,515,true);
     chassis.encMove(70,60,true);
     shot1Motor.on(-100);
     shot2Motor.on(-100);
     chassis.turnGyro(97);
     clawMotor.turnToPosition(100,550,false);
-    // chassis.encMove(140, 50, false);
+    
     chassis.onForTime(60, 0.7,false);
     wait(0.3, timeUnits::sec);
     chassis.encMove(15,-50,true);
