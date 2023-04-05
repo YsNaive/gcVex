@@ -58,7 +58,6 @@ void chassisController::encMove(float enc, float power, bool isHold)
     pidController.reset();
     float leftStartPos = leftMotor.motor.position(vex::rotationUnits::deg);
     float rightStartPos = rightMotor.motor.position(vex::rotationUnits::deg);
-    float gyroStartPos = inertialPtr->rotation();
 
     float nowEnc = 0;
     float leftEnc;
@@ -71,8 +70,8 @@ void chassisController::encMove(float enc, float power, bool isHold)
         rightEnc = abs(rightMotor.motor.position(vex::rotationUnits::deg) - rightStartPos);
         nowEnc = ((leftEnc + rightEnc) / 2);
         arrived = (nowEnc >= enc);
-        // error = leftEnc-rightEnc;
-        error = inertialPtr->rotation() - gyroStartPos;
+        error = leftEnc-rightEnc;
+
         pidController.calPID(power);
         pidController.update(error);
         fixValue = pidController.fixValue;
