@@ -191,7 +191,7 @@ void chassisController::arcMove(float power, float r, float enc)
         vex::wait(10, vex::timeUnits::msec);
     }
     chassisController::off(true);
-    pidController.setMaxPID(float3 (0.5,0,0.15));
+    pidController.setMaxPID(float3 (0.8,0,0.2));
     pidController.setMinPID(float3 (0.3,0,0.1));
 }
 
@@ -231,7 +231,7 @@ void chassisController::onForTime(float power, float time, bool PdorNot)
             chassisController::on(power, power);
         }
     }
-    chassisController::off(true);
+    chassisController::off(false);
 }
 /// @brief
 /// @param power
