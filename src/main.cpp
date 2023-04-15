@@ -41,7 +41,7 @@ void init(){
     chassis.leftMotor.motor.setReversed(true);
     chassis.minPower = 12;
     chassis.startAccEnc = 50;
-    chassis.endAccEnc = 200;
+    chassis.endAccEnc = 350;
     chassis.allowErrorEnc = 10;
 
     shot1Motor = motorController(PORT5);
@@ -61,6 +61,7 @@ void printGyroDeg(){
 void setUp(){
     chassis.leftMotor.motor.setMaxTorque(100, currentUnits::amp);
     chassis.rightMotor.motor.setMaxTorque(100, currentUnits::amp);
+
     Gyro.installed();
     Gyro.calibrate(gyroCalibrationType::calNormal, true);
     Gyro.setRotation(0, rotationUnits::deg);
@@ -244,38 +245,42 @@ int main() {
     upDownMotor.turnToPosition(100,240,false);
     chassis.turnGyro(45);
 
-    shot1Motor.on(shotPower);
-    shot2Motor.on(shotPower);
+    // shot1Motor.on(shotPower);
+    // shot2Motor.on(shotPower);
     chassis.encMoveAcc(600, 60);
     upDownMotor.turnToPosition(100,200,true);
     upDownMotor.on(0);
     chassis.turnGyro(5);
     chassis.onForTime(-50,1.1,false);
     chassis.on(-60,-60);
-    clawMotor.on(100);
-    wait(1,timeUnits::sec);
-    clawMotor.turnToPosition(100,525,true);
+    // clawMotor.on(100);
+    wait(1,timeUnits::sec); 
+    // clawMotor.turnToPosition(100,525,true);
     chassis.encMove(100,100,false);
-    chassis.encMove(30,60, true);
-    shot1Motor.on(100);
-    shot2Motor.on(100);
+    chassis.encMove(60,30,true);
+    // shot1Motor.on(100);
+    // shot2Motor.on(100);
     upDownMotor.turnToPosition(100,250,false);
     
-    clawMotor.turnToPosition(100,550,false);
-    chassis.turnGyro(110);
-    chassis.arcMove(70, -2.7, 90);
-    chassis.onForTime(70, 0.7, false);
-    chassis.encMove(23, -50, true);
-    shake(4);
+    // clawMotor.turnToPosition(100,550,false);
+    chassis.turnGyro(120);
+    chassis.encMove(150, 50, true);
+    // chassis.turnGyro(97);
+    chassis.on(50, -50);
+    wait(1, timeUnits::sec);
+    chassis.onForTime(70, 2, false);
 
 
-    shot1Motor.on(shotPower);
-    shot2Motor.on(shotPower);
- 
-    chassis.arcMove(-70,-2.5,280);
+
+    // shot1Motor.on(shotPower);
+    // shot2Motor.on(shotPower);
+    chassis.encMove(-50,60, true);
+    chassis.turnEnc(-50, 60);
+
+    chassis.arcMove(-70,-2.6,300);
     chassis.arcMove(-70,2.1,330);
     chassis.turnEnc(90,175);
-    shot(1);
+    // shot(1);
 
 
 
