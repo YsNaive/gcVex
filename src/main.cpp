@@ -26,6 +26,8 @@ vex::inertial brainInertial;
 vex::touchled touchLed = vex::touchled(PORT2);
 vex::colorsensor Color = colorsensor(PORT4);
 vex::gyro Gyro = vex::gyro(PORT9);
+vex::vision::signature Vision__DISC = vision::signature(1, 5349, 7747, 6548,-2313, -1607, -1960,2.5, 0);
+vex::vision Vision3 = vex::vision(PORT3, 50, Vision__DISC);
 float shotPower = 45;
 float colorMid = 36 ;
 
@@ -185,24 +187,26 @@ void yellowTower(float time){
     wait(0.3, timeUnits::sec);
 }
 
-void purpleTower(float time, float p, float d){
+void purpleTower(float time, float p, float i, float d, float basicPower){
 
-    float3 pid = float3( p ,0, d);
-    float3 error = float3(0 ,0, 0);
-    int fix;
+    float3 pid = float3( p ,i, d);
+    float error;
+    float totalError;
+    float lastError;
+    float fix;
     Brain.Timer.reset();
     while (Brain.Timer.value() < time)
     {
-        error.x = Color.brightness() - colorMid;
-        error.y += error.x;
-        error.y -= error.x;
-
-        fix = (pid * error).sum();
-        chassis.on(18-fix, 18+fix);
-        // printf("%d\n", color.brightness());
-
-        error.z = error.x;
-
+        Vision3.takeSnapshot(Vision__DISC);
+        if (Vision3.objectCount > 0){
+           error = ((double)Vision3.largestObject.centerX - 158);
+        }
+        else
+            error = 0;
+        printf("%d \n", (int)error);
+        fix = (pid * float3(error, totalError, (error - lastError))).sum();
+        chassis.on(basicPower-fix, basicPower+fix);
+        lastError = error;
         vex::wait(10, timeUnits::msec);
     }
 }
@@ -233,95 +237,96 @@ void shake(int times){
 int main() {
     // main
     init();
-    setUp();
-    shotPower = 50;
-    Gyro.setRotation(180, vex::rotationUnits::deg);
-    upDownMotor.turnToPosition(80,220,true);
-    touchLed.on(vex::color::green);
-    while(!touchLed.pressing()){}
-    yellowTower(2.1);
+    purpleTower(10, 0.5, 0, 0.02, 50);
+    // setUp();
+    // shotPower = 50;
+    // Gyro.setRotation(180, vex::rotationUnits::deg);
+    // upDownMotor.turnToPosition(80,220,true);
+    // touchLed.on(vex::color::green);
+    // while(!touchLed.pressing()){}
+    // yellowTower(2.1);
 
-    chassis.encMoveAcc(190 , 50);
-    upDownMotor.turnToPosition(100,240,false);
-    chassis.turnGyro(45);
+    // chassis.encMoveAcc(190 , 50);
+    // upDownMotor.turnToPosition(100,240,false);
+    // chassis.turnGyro(45);
 
-    // shot1Motor.on(shotPower);
-    // shot2Motor.on(shotPower);
-    chassis.encMoveAcc(600, 60);
-    upDownMotor.turnToPosition(100,200,true);
-    upDownMotor.on(0);
-    chassis.turnGyro(5);
-    chassis.onForTime(-50,1.1,false);
-    chassis.on(-60,-60);
+    // // shot1Motor.on(shotPower);
+    // // shot2Motor.on(shotPower);
+    // chassis.encMoveAcc(600, 60);
+    // upDownMotor.turnToPosition(100,200,true);
+    // upDownMotor.on(0);
+    // chassis.turnGyro(5);
+    // chassis.onForTime(-50,1.1,false);
+    // chassis.on(-60,-60);
+    // // clawMotor.on(100);
+    // wait(1,timeUnits::sec); 
+    // // clawMotor.turnToPosition(100,525,true);
+    // chassis.encMove(100,100,false);
+    // chassis.encMove(60,30,true);
+    // // shot1Motor.on(100);
+    // // shot2Motor.on(100);
+    // upDownMotor.turnToPosition(100,250,false);
+    
+    // // clawMotor.turnToPosition(100,550,false);
+    // chassis.turnGyro(120);
+    // chassis.encMove(150, 50, true);
+    // // chassis.turnGyro(97);
+    // chassis.on(50, -50);
+    // wait(1, timeUnits::sec);
+    // chassis.onForTime(70, 2, false);
+
+
+
+    // // shot1Motor.on(shotPower);
+    // // shot2Motor.on(shotPower);
+    // chassis.encMove(-50,60, true);
+    // chassis.turnEnc(-50, 60);
+
+    // chassis.arcMove(-70,-2.6,300);
+    // chassis.arcMove(-70,2.1,330);
+    // chassis.turnEnc(90,175);
+    // // shot(1);
+
+
+
+
+
+    // // shotPower -= 5;
+    // chassis.encMove(60,-50,true);
+    // chassis.turnGyro(-99);
+    // chassis.onForTime(50,0.5,true);
+    // chassis.onForTime(90,1.2,true);
+    // chassis.onForTime(20,1,true);
+    // Gyro.setRotation(-90, rotationUnits::deg);
+    // chassis.encMoveAcc(260,-70);
+    // chassis.turnGyro(0);
+    // upDownMotor.turnToPosition(100, 320, false);
+
+    // chassis.endAccEnc = 0;
+    // chassis.encMoveAcc(300,-60);
+    // chassis.endAccEnc = 200;
+    // chassis.onForTime(-60,0.3,true);
+    // chassis.on(-60,-60);
     // clawMotor.on(100);
-    wait(1,timeUnits::sec); 
-    // clawMotor.turnToPosition(100,525,true);
-    chassis.encMove(100,100,false);
-    chassis.encMove(60,30,true);
+    // wait(1,timeUnits::sec);
+    // clawMotor.turnToPosition(100,515,true);
+    // chassis.encMove(85,70,true);
     // shot1Motor.on(100);
     // shot2Motor.on(100);
-    upDownMotor.turnToPosition(100,250,false);
-    
+    // upDownMotor.turnToPosition(100,250,false);
+    // chassis.turnGyro(-100);
     // clawMotor.turnToPosition(100,550,false);
-    chassis.turnGyro(120);
-    chassis.encMove(150, 50, true);
-    // chassis.turnGyro(97);
-    chassis.on(50, -50);
-    wait(1, timeUnits::sec);
-    chassis.onForTime(70, 2, false);
-
-
-
-    // shot1Motor.on(shotPower);
-    // shot2Motor.on(shotPower);
-    chassis.encMove(-50,60, true);
-    chassis.turnEnc(-50, 60);
-
-    chassis.arcMove(-70,-2.6,300);
-    chassis.arcMove(-70,2.1,330);
-    chassis.turnEnc(90,175);
-    // shot(1);
-
-
-
-
-
-    // shotPower -= 5;
-    chassis.encMove(60,-50,true);
-    chassis.turnGyro(-99);
-    chassis.onForTime(50,0.5,true);
-    chassis.onForTime(90,1.2,true);
-    chassis.onForTime(20,1,true);
-    Gyro.setRotation(-90, rotationUnits::deg);
-    chassis.encMoveAcc(260,-70);
-    chassis.turnGyro(0);
-    upDownMotor.turnToPosition(100, 320, false);
-
-    chassis.endAccEnc = 0;
-    chassis.encMoveAcc(300,-60);
-    chassis.endAccEnc = 200;
-    chassis.onForTime(-60,0.3,true);
-    chassis.on(-60,-60);
-    clawMotor.on(100);
-    wait(1,timeUnits::sec);
-    clawMotor.turnToPosition(100,515,true);
-    chassis.encMove(85,70,true);
-    shot1Motor.on(100);
-    shot2Motor.on(100);
-    upDownMotor.turnToPosition(100,250,false);
-    chassis.turnGyro(-100);
-    clawMotor.turnToPosition(100,550,false);
     
-    chassis.onForTime(70, 1,false);
-    wait(0.5, timeUnits::sec);
-    chassis.off(true);
-    shake(4);
+    // chassis.onForTime(70, 1,false);
+    // wait(0.5, timeUnits::sec);
+    // chassis.off(true);
+    // shake(4);
 
-    chassis.encMove(180, -50, true);
-    chassis.turnGyro(0);
-    shot(2);
+    // chassis.encMove(180, -50, true);
+    // chassis.turnGyro(0);
+    // shot(2);
 
-    extend();
+    // extend();
     
 
  }
