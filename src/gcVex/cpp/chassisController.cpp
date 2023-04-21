@@ -191,8 +191,8 @@ void chassisController::arcMove(float power, float r, float enc)
         vex::wait(10, vex::timeUnits::msec);
     }
     chassisController::off(true);
-    pidController.setMaxPID(float3 (0.8,0,0.2));
-    pidController.setMinPID(float3 (0.3,0,0.1));
+    pidController.setMaxPID(float3 (0.6,0,0.1));
+    pidController.setMinPID(float3 (0.2,0,0.05));
 }
 
 void chassisController::onForTime(float power, float time, bool PdorNot)
@@ -268,13 +268,13 @@ void chassisController::turnGyro(float target)
         printf("DEG %d\n", (int)inertialPtr->rotation(vex::rotationUnits::deg));
         error = (target - gyroPtr->rotation(rotationUnits::deg));
         totalError += error;
-        if (std::abs(error) < 7)
+        if (std::abs(error) < 5)
             arrivedCount++;
         else
             arrivedCount = 0;
 
         if(std::abs(error) > 50)
-            pid = float3(0.42, 0.0001 , 0.3);
+            pid = float3(0.42, 0.0001 , 0.4);
         else
             pid = float3(0.4, 0.001, 0.2);
 
