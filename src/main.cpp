@@ -245,10 +245,11 @@ void purpleTower(float time, float p, float i, float d, float basicPower){
 }
 
 void extend(){
-    chassis.turnEnc(70,270);
+    chassis.turnEnc(100,310);
     // chassis.turnGyro(-50);
-    chassis.arcMove(70,2.1,100);
-    chassis.onForTime(100, 1.7, false);
+    // chassis.arcMove(70,3,100);
+    chassis.on(60, 100);
+    wait(1.6, timeUnits::sec);
     clawMotor.on(100);
     chassis.on(100,100);
  }
@@ -338,10 +339,11 @@ int main() {
 
     shotPower -= 7;
     chassis.encMove(60,-50,true);
-    chassis.turnGyro(-95);
-    chassis.onForTime(50,0.8,true);
-    chassis.onForTime(90,1.4,true);
-    chassis.onForTime(50,1.2,true);
+    // chassis.turnGyro(-95);
+    chassis.turnEnc(65, 130);
+    chassis.onForTime(50,0.7,true);
+    chassis.onForTime(90,1.2,true);
+    chassis.onForTime(50,1,true);
 
     Gyro.setRotation(-90, rotationUnits::deg);
     chassis.encMoveAcc(280,-50);
@@ -376,11 +378,10 @@ int main() {
     chassis.turnGyro(0);
     chassis.onForTime(60, 2, true);
     shot(2);
-    chassis.arcMove(-70, -2.7, 250);
+    chassis.arcMove(-70, -2, 250);
 
     extend();
     
-
  }
  
 
