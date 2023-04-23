@@ -274,12 +274,13 @@ void chassisController::turnGyro(float target)
             arrivedCount = 0;
 
         if(std::abs(error) > 50)
-            pid = float3(0.42, 0.0001 , 0.4);
+            pid = float3(0.48, 0.0001 , 0.4);
         else
             pid = float3(0.4, 0.001, 0.2);
 
         power = (float3(error, totalError, lastError - error) * pid).sum();
-        power += 2.6 * (power / std::abs(power));
+        power += 4 * (power / std::abs(power));
+
         chassisController::on(-power, power);
         lastError = error;
         vex::wait(25, timeUnits::msec);
