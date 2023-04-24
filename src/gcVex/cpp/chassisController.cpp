@@ -255,6 +255,7 @@ void chassisController::turnEnc(float power, float enc)
 
 void chassisController::turnGyro(float target)
 {
+    brainPtr->resetTimer();
     bool arrived = false;
     float3 pid ;
     float error;
@@ -262,28 +263,36 @@ void chassisController::turnGyro(float target)
     float totalError = 0;
     float power;
     int arrivedCount = 0;
-    while (arrivedCount < 10)
+    while (arrivedCount < 15)
     {
         printf("ERR %d\n", (int)error);
         printf("DEG %d\n", (int)inertialPtr->rotation(vex::rotationUnits::deg));
         error = (target - gyroPtr->rotation(rotationUnits::deg));
         totalError += error;
-        if (std::abs(error) < 4)
+        if (std::abs(error) < 5)
             arrivedCount++;
         else
             arrivedCount = 0;
 
-        if(std::abs(error) > 27)
+        if(std::abs(error) > 25){
+
             pid = float3(0.52, 0.0001 , 0.4);
-        else
-            pid = float3(0.15, 0.001, 0.2);
-
-        power = (float3(error, totalError, lastError - error) * pid).sum();
-        power += 7 * (power / std::abs(power));
-
+            power = (float3(error, totalError, lastError - error) * pid).sum();
+            power += 50 * (power / std::abs(power));
+        }
+        if(brainPtr->Timer.time(timeUnits::sec) < 0.3){
+            pid = float3(0.52, 0.0001 , 0.4);
+            power = (float3(error, totalError, lastError - error) * pid).sum();
+            power += 50 * (power / std::abs(power));
+        } 
+        else{
+            pid = float3(0.4, 0, 0.04);
+            power = (float3(error, totalError, lastError - error) * pid).sum();
+            power += 6 * (power / std::abs(power));
+        }
         chassisController::on(-power, power);
         lastError = error;
-        vex::wait(25, timeUnits::msec);
+        vex::wait(10, timeUnits::msec);
     }
     // brainPtr->playSound(vex::soundType::alarm);
     chassisController::off(true);
