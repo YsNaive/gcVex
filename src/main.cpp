@@ -74,7 +74,7 @@ void setUp()
     vex::wait(1.5, vex::timeUnits::sec);
     upDownMotor.off();
     clawMotor.off();
-    upDownMotor.motor.setPosition(70, vex::rotationUnits::deg);
+    upDownMotor.motor.setPosition(40, vex::rotationUnits::deg);
     clawMotor.motor.setPosition(0, vex::rotationUnits::deg);
     upDownMotor.turnToPosition(100, 270, false);
     clawMotor.turnToPosition(50, 490, true);
@@ -144,6 +144,7 @@ void shot(int type)
         upDownMotor.on(100);
         wait(0.7, timeUnits::sec);
         upDownMotor.turnToPosition(100, 110, true);
+        // chassis.encMove(80, -70, true);
 
         int times = 0;
         while (times < 1)
@@ -154,9 +155,11 @@ void shot(int type)
             times += 1;
         }
         clawMotor.on(-100);
-        chassis.encMove(30, -70, true);
+        // chassis.encMove(30, -70, true);
         chassis.on(100, 100);
         wait(0.8, timeUnits::sec);
+        upDownMotor.on(100);
+        // chassis.encMove(95, -70, true);
         clawMotor.turnToPosition(100, 500, false);
         shot1Motor.on((shotPower + 5));
         shot2Motor.on((shotPower + 5));
@@ -290,128 +293,130 @@ int main()
     
     // Gyro.installed();
     // Gyro.calibrate(gyroCalibrationType::calNormal, true);
-    // Gyro.setRotation(0, rotationUnits::deg);
-    // chassis.turnGyro(50);
+    Gyro.setRotation(0, rotationUnits::deg);
+    // chassis.turnGyro(90);
     // Brain.playSound(soundType::alarm2);
-    shotPower = 45;
-    Gyro.setRotation(180, vex::rotationUnits::deg);
-    upDownMotor.turnToPosition(80, 220, true);
-    touchLed.on(vex::color::green);
-    while (!touchLed.pressing())
-    {
-    }
-    yellowTower(2.1);
+    // shotPower = 45;
+    // Gyro.setRotation(180, vex::rotationUnits::deg);
+    // upDownMotor.turnToPosition(80, 220, true);
+    // touchLed.on(vex::color::green);
+    // while (!touchLed.pressing())
+    // {
+    // }
+    // yellowTower(2.1);
 
-    chassis.encMoveAcc(190, 50);
-    upDownMotor.turnToPosition(100, 240, false);
-    // chassis.turnGyro(40);
-    chassis.turnEnc(60, 360);
-    wait(0.1, timeUnits::sec);
+    // chassis.encMoveAcc(190, 50);
+    // upDownMotor.turnToPosition(100, 240, false);
+    // // chassis.turnGyro(40);
+    // chassis.turnEnc(60, 360);
+    // wait(0.1, timeUnits::sec);
 
-    shot1Motor.on(shotPower);
-    shot2Motor.on(shotPower);
-    Color1.setLight(ledState::on);
-    chassis.encMove(400, 70, false);
-    while (Color1.brightness() > 20)
-    {
-        chassis.on(60, 60);
-    }
-    chassis.encMove(200, 50, true);
-    Color1.setLight(ledState::off);
+    // shot1Motor.on(shotPower);
+    // shot2Motor.on(shotPower);
+    // Color1.setLight(ledState::on);
+    // chassis.encMove(400, 70, false);
+    // while (Color1.brightness() > 20)
+    // {
+    //     chassis.on(60, 60);
+    // }
+    // chassis.encMove(200, 50, true);
+    // Color1.setLight(ledState::off);
 
-    wait(0.3, timeUnits::sec);
-    upDownMotor.turnToPosition(100, 260, true);
-    upDownMotor.on(0);
-    chassis.turnGyro(3);
-    chassis.onForTime(-80, 1.1, false);
-    chassis.on(-80, -80);
-    clawMotor.on(100);
-    wait(1, timeUnits::sec);
-    clawMotor.turnToPosition(100, 505, true);
-    // clawMotor.on(-100);
-    // wait(0.6, timeUnits::sec);
-    // clawMotor.off(true);
-    // wait(0.5, timeUnits::sec);
-    chassis.leftMotor.motor.setPosition(0, rotationUnits::deg);
-    chassis.rightMotor.motor.setPosition(0, rotationUnits::deg);
-    // Brain.playSound(soundType::alarm2);
-    chassis.on(0, 0);
-    chassis.encMove(70, 70, false);
-    chassis.encMove(60, 30, true);
-    // chassis.onForTime(100, 5, true);
+    // wait(0.3, timeUnits::sec);
+    // upDownMotor.turnToPosition(100, 275, true);
+    // upDownMotor.on(0);
+    // chassis.turnGyro(3);
+    // chassis.onForTime(-80, 1.1, false);
+    // chassis.on(-80, -80);
+    // clawMotor.on(100);
+    // wait(1, timeUnits::sec);
+    // clawMotor.turnToPosition(100, 505, true);
+    // // clawMotor.on(-100);
+    // // wait(0.6, timeUnits::sec);
+    // // clawMotor.off(true);
+    // // wait(0.5, timeUnits::sec);
+    // chassis.leftMotor.motor.setPosition(0, rotationUnits::deg);
+    // chassis.rightMotor.motor.setPosition(0, rotationUnits::deg);
+    // // Brain.playSound(soundType::alarm2);
+    // chassis.on(0, 0);
+    // chassis.encMove(70, 70, false);
+    // chassis.encMove(60, 30, true);
+    // // chassis.onForTime(100, 5, true);
 
-    shot1Motor.on(100);
-    shot2Motor.on(100);
-    upDownMotor.turnToPosition(100, 250, false);
+    // shot1Motor.on(100);
+    // shot2Motor.on(100);
+    // upDownMotor.turnToPosition(100, 250, false);
 
-    clawMotor.turnToPosition(100, 550, false);
-    // chassis.turnGyro(140);
-    chassis.turnEnc(-60, 330);
-    chassis.encMove(200, 80, true);
-    // chassis.turnGyro(95);-
-    // chassis.turnEnc(90, 130);
+    // clawMotor.turnToPosition(100, 550, false);
+    // // chassis.turnGyro(140);
+    // chassis.turnEnc(-60, 320);
+    // chassis.encMove(200, 80, true);
+    // // chassis.turnGyro(95);-
+    // // chassis.turnEnc(90, 130);
 
-    // chassis.leftMotor.onEnc(-70, 160, true);
-    chassis.off(true);
-    Vision3.takeSnapshot(Vision__DISC);
-    while (!((Vision3.objectCount > 0) && (Vision3.largestObject.centerX >= 60) && ((Vision3.largestObject.width * Vision3.largestObject.height) > 100)))
-    {
-        wait(0.05, timeUnits::sec);
-        //float error, power;
-        Vision3.takeSnapshot(Vision__DISC);
-        // if(Vision3.objectCount = 0)
-        //     error = 150;
-        // else
-        // {
-        //     if(error < -10)
-        //         error = -10;
-        //     else
-        //         error = (-Vision3.largestObject.centerX + 100);
-        // }
-        // power = error* 0.8;
-        // chassis.on(50, -90);
-        chassis.rightMotor.on(-(Vision3.largestObject.centerX + 70) * 0.6);
-    }
+    // // chassis.leftMotor.onEnc(-70, 160, true);
+    // chassis.off(true);
+    // Vision3.takeSnapshot(Vision__DISC);
+    // while (!((Vision3.objectCount > 0) && (Vision3.largestObject.centerX >= 60) && ((Vision3.largestObject.width * Vision3.largestObject.height) > 100)))
+    // {
+    //     wait(0.05, timeUnits::sec);
+    //     //float error, power;
+    //     Vision3.takeSnapshot(Vision__DISC);
+    //     // if(Vision3.objectCount = 0)
+    //     //     error = 150;
+    //     // else
+    //     // {
+    //     //     if(error < -10)
+    //     //         error = -10;
+    //     //     else
+    //     //         error = (-Vision3.largestObject.centerX + 100);
+    //     // }
+    //     // power = error* 0.8;
+    //     // chassis.on(50, -90);
+    //     chassis.rightMotor.on(-(Vision3.largestObject.centerX + 70) * 0.6);
+    // }
 
-    chassis.off(true);
-    purpleTower(2.5, 0.31, 0.0012, 0.05, 40);
+    // chassis.off(true);
+    // purpleTower(2.1, 0.31, 0.0012, 0.05, 40);
 
-    shot1Motor.on(shotPower);
-    shot2Motor.on(shotPower);
-    upDownMotor.turnToPosition(100, 280, false);
-    chassis.encMove(80, -60, true);
-    chassis.turnEnc(-60, 200);
+    // shot1Motor.on(shotPower);
+    // shot2Motor.on(shotPower);
+    // upDownMotor.turnToPosition(100, 280, false);
+    // chassis.encMove(70, -70, true);
+    // chassis.turnEnc(-70, 200);
 
-    chassis.arcMove(-70, 1.57, 580);
-    // chassis.arcMove(-50,-2.4,190);
-    // chassis.arcMove(-70,2.1,410);
-    chassis.turnEnc(100, 140);
-    chassis.encMove(30, -70, true);
-    shot(1);
+    // chassis.arcMove(-70, 1.57, 560);
+    // // chassis.arcMove(-50,-2.4,190);
+    // // chassis.arcMove(-70,2.1,410);
+    // chassis.rightMotor.on(-100);
+    // wait(0.25, timeUnits::sec);
+    // chassis.turnEnc(100, 130);
+    // chassis.encMove(30, -70, true);
+    // shot(1);
 
-    shotPower -= 3;
-    chassis.encMove(50, -50, true);
-    // chassis.turnGyro(-95);
-    chassis.turnEnc(90, 280);
-    // chassis.turnGyro(-110);
-    // chassis.onForTime(50,0.7,true);
-    // chassis.onForTime(90,1.2,true);
-    // chassis.onForTime(60,1,true);
+    // shotPower -= 3;
+    // chassis.encMove(50, -50, true);
+    // // chassis.turnGyro(-95);
+    // chassis.turnEnc(90, 280);
+    // // chassis.turnGyro(-110);
+    // // chassis.onForTime(50,0.7,true);
+    // // chassis.onForTime(90,1.2,true);
+    // // chassis.onForTime(60,1,true);
 
-    // Gyro.setRotation(-90, rotationUnits::deg);
-    // chassis.encMoveAcc(280,-40);
-    Color2.setLight(ledState::on);
-    chassis.encMove(300, 50, false);
-    while (Color2.brightness() > 20)
-    {
-        chassis.on(40, 40);
-    }
-    chassis.encMove(20, -30, true);
-    chassis.off(true);
-    Color2.setLight(ledState::off);
+    // // Gyro.setRotation(-90, rotationUnits::deg);
+    // // chassis.encMoveAcc(280,-40);
+    // Color2.setLight(ledState::on);
+    // chassis.encMove(300, 50, false);
+    // while (Color2.brightness() > 20)
+    // {
+    //     chassis.on(40, 40);
+    // }
+    // chassis.encMove(20, -30, true);
+    // chassis.off(true);
+    // Color2.setLight(ledState::off);
 
-    chassis.turnGyro(0);
-    upDownMotor.turnToPosition(100, 300, false);
+    // chassis.turnGyro(0);
+    // upDownMotor.turnToPosition(100, 300, false);
 
     // chassis.endAccEnc = 0;
     // chassis.encMoveAcc(280,-80);
@@ -431,12 +436,24 @@ int main()
     shot1Motor.on(100);
     shot2Motor.on(100);
     upDownMotor.turnToPosition(100, 290, false);
-    chassis.turnGyro(-95);
+    chassis.turnGyro(-100);
+        while (!((Vision3.objectCount > 0) && (Vision3.largestObject.centerX >= 170) && ((Vision3.largestObject.width * Vision3.largestObject.height) > 100)))
+    {
+        wait(0.05, timeUnits::sec);
+        Vision3.takeSnapshot(Vision__DISC);
+        float power = (Vision3.largestObject.centerX + 70) * 1;
+        chassis.on((power*1.5), -power);
+    }
+
+    chassis.off(true);
     clawMotor.turnToPosition(100, 550, false);
-    purpleTower(2.7, 0.7, 0.0001, 0.025, 50);
+    purpleTower(1.2, 0.2, 0, 0.03, 40);
+    chassis.on(100, 100);
+    wait(1.2, timeUnits::sec);
+    // chassis.onForTime(70, 2, true);
 
     upDownMotor.turnToPosition(100, 280, false);
-    chassis.encMove(220, -50, true);
+    chassis.encMove(240, -50, true);
     shot1Motor.on(shotPower);
     shot2Motor.on(shotPower);
     // chassis.arcMove(-50, 2.5, 215);
@@ -453,9 +470,9 @@ int main()
     upDownMotor.on(100);
     shot(2);
     // chassis.arcMove(-70, -2, 250);
-    chassis.encMove(90, -70, true);
+    chassis.encMove(110, -70, true);
     chassis.on(0, 0);
-    chassis.turnEnc(90, 160);
+    chassis.turnEnc(100, 150);
 
     extend();
 }
