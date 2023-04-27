@@ -134,7 +134,7 @@ void shot(int type)
         while (times < 3)
         {
             upDownMotor.on(100);
-            wait(0.75, timeUnits::sec);
+            wait(0.1, timeUnits::sec);
             upDownMotor.turnToPosition(100, 110, true);
             times += 1;
         }
@@ -164,7 +164,7 @@ void shot(int type)
         shot1Motor.on((shotPower + 5));
         shot2Motor.on((shotPower + 5));
         times = 0;
-        while (times < 2)
+        while (times < 3)
         {
             upDownMotor.on(100);
             wait(0.75, timeUnits::sec);
@@ -291,7 +291,7 @@ int main()
     // Gyro.setRotation(0, rotationUnits::deg);
     // chassis.turnGyro(90);
     // Brain.playSound(soundType::alarm2);
-    shotPower = 45;
+    shotPower = 50;
     Gyro.setRotation(180, vex::rotationUnits::deg);
     upDownMotor.turnToPosition(80, 220, true);
     touchLed.on(vex::color::green);
@@ -308,7 +308,7 @@ int main()
     shot1Motor.on(shotPower);
     shot2Motor.on(shotPower);
     Color1.setLight(ledState::on);
-    chassis.encMove(300, 70, false);
+    chassis.encMove(280, 70, false);
     while (Color1.brightness() > 20)
     {
         chassis.on(60, 60);
@@ -381,7 +381,7 @@ int main()
     {
         chassis.on(30, 30);
     }
-    // chassis.encMove(10, 30, true);
+    chassis.encMove(10, 30, true);
     chassis.off(true);
     Color2.setLight(ledState::off);
 
@@ -395,12 +395,12 @@ int main()
     clawMotor.turnToPosition(100, 500, true);
     // wait(0.5, timeUnits::sec);
     chassis.on(0, 0);
-    chassis.encMove(90, 60, true);
+    chassis.encMove(110, 70, true);
     shot1Motor.on(100);
     shot2Motor.on(100);
     upDownMotor.turnToPosition(100, 290, false);
     chassis.turnGyro(-100);
-    while (!((Vision3.objectCount > 0) && (Vision3.largestObject.centerX >= 170) && ((Vision3.largestObject.width * Vision3.largestObject.height) > 100)))
+    while (!((Vision3.objectCount > 0) && (Vision3.largestObject.centerX >= 150) && ((Vision3.largestObject.width * Vision3.largestObject.height) > 100)))
     {
         wait(0.05, timeUnits::sec);
         Vision3.takeSnapshot(Vision__DISC);

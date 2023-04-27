@@ -288,7 +288,7 @@ void chassisController::turnGyro(float target)
         else{
             pid = float3(0.45, 0, 0.03);
             power = (float3(error, totalError, lastError - error) * pid).sum();
-            power += 7 * (power / std::abs(power));
+            power += 7* (power / std::abs(power));
         }
         chassisController::on(-power, power);
         lastError = error;
